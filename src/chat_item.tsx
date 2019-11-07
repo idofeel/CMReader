@@ -22,7 +22,7 @@ class ChatItem extends Component<Props, State> {
 	componentDidMount() {
 		console.log(NativeModules)
 		try {
-			this.listener = CMR.IsExistCLEFile('asdasdsa', (err, res) => {
+			this.listener = CMR.IsExistCLEFile('asdasdsa', (err:any, res:any) => {
 				console.log(res)
 			});
 		} catch (error) {
