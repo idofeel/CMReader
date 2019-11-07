@@ -8,6 +8,8 @@
     "start": "react-native start",
     "clean": "rm -rf node_modules && yarn cache clean",
     "test": "jest",
+    "mkbundle": "rm -rf bundle && mkdir -p ./bundle/ios && mkdir -p ./bundle/android",
+    "build": "yarn mkbundle && react-native bundle --entry-file index.js --bundle-output ./bundle/android/index.android.bundle --platform android --assets-dest ./bundle/android --dev false && react-native bundle --entry-file index.js --bundle-output ./bundle/ios/index.ios.bundle --platform ios --assets-dest ./bundle/ios --dev false ",
     "lint": "eslint ."
   },
   "dependencies": {
