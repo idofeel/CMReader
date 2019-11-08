@@ -6,11 +6,7 @@ import { createBottomTabNavigator } from 'react-navigation-tabs';
 import Test from './tset';
 import Header from './components/Header';
 import { Drawer, Button, WhiteSpace } from '@ant-design/react-native';
-import AntDesign from './pages/AntDesign';
-import AntListview from './pages/demo/AntListview';
-import Tabar from './pages/demo/tab';
 import HomePage from './pages/HomePage/HomePage';
-import Icons from './pages/demo/icons';
 
 interface State { }
 interface Props {
@@ -51,21 +47,18 @@ const HomeTab = {
     'Home': {
         screen: HomePage,
     },
-    'Test': Test,
-    'ant': AntDesign
 }
 
 const BottomTabNavigatorConfig = {
     initialRouteName: 'Home',
-    labelPosition: 'below-icon'
-    // tabBarComponent: props => {
-    //     // 底部导航
-    //     return null
-    // }
+    labelPosition: 'below-icon',
+    tabBarComponent: (props: Props) => {
+        // 底部导航
+        return null
+    }
 }
 
 const Tab = createBottomTabNavigator(HomeTab, BottomTabNavigatorConfig)
-
 
 const Page = {
     HomePage: {
@@ -81,15 +74,6 @@ const Page = {
     Test1: {
         screen: HomeScreen,
 
-    },
-    AntList: {
-        screen: AntListview,
-    },
-    tabbar: {
-        screen: Tabar,
-    },
-    icons: {
-        screen: Icons
     }
 }
 

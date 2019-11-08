@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { Component } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, NativeModules, DeviceEventEmitter } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { Icon } from '@ant-design/react-native';
-const CMR = NativeModules.CMRRNModule;
 
 interface Item {
 	imageurl: string;
@@ -10,6 +9,7 @@ interface Item {
 	cleurl: string;
 	title: string;
 	size: string;
+	exist: boolean;
 }
 interface State { }
 interface Props {
@@ -18,18 +18,6 @@ interface Props {
 }
 
 class ChatItem extends Component<Props, State> {
-	listener = null
-	componentDidMount() {
-		console.log(NativeModules)
-		try {
-			this.listener = CMR.IsExistCLEFile('asdasdsa', (err:any, res:any) => {
-				console.log(res)
-			});
-		} catch (error) {
-			
-		}
-		
-	}
 	render() {
 		const { item } = this.props;
 		return (
@@ -55,8 +43,7 @@ class ChatItem extends Component<Props, State> {
 							文件大小{item.size}
 						</Text> */}
 					</View>
-					<Icon name="download" color="#666" />
-					<Icon name="check-circle" color="green" />
+					{item.exist ? <Icon name="check-circle" color="green" /> : <Icon name="download" color="#666" />}
 				</View>
 				<View style={styles.spliteLine} />
 			</TouchableOpacity>

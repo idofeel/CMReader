@@ -13,7 +13,7 @@ class Request {
      * @param {*} url
      * @param {*} options
      */
-    async _request(url: string, options, type?, retry?) {
+    async _request(url: string, options?: any, type?: string, retry?: number) {
         options.time = new Date().getTime();
         // url = url.indexOf('http') == 0 ? url : url.indexOf('/api') == 0 || url.indexOf('/xczin') == 0 || url.indexOf('/xc_uc') == 0 ? domain + url : baseUrl + url;
         url = joinUrl(url);
@@ -25,11 +25,11 @@ class Request {
     /**
      * 简易请求,返回结果简单处理
      */
-    async _simple(url, options, type, retry) {
+    async _simple(url: string, options?: any, type?: string, retry?: number) {
         options.time = new Date().getTime();
         // url = url.indexOf('http') == 0 ? url : url.indexOf('/api') == 0 || url.indexOf('/xczin') == 0 || url.indexOf('/xc_uc') == 0 ? domain + url : baseUrl + url;
         url = joinUrl(url);
-        let res = await this._fetch(url, options, retry);
+        let res: any = await this._fetch(url, options, retry);
         let json = await res.json();
         if (json.data) return json.data;
         return {};
@@ -40,7 +40,7 @@ class Request {
      * @param {*} options
      * @param {*} type
      */
-    _push(url, options, type) {
+    _push(url: string, options?: any, type?: string) {
         // url = url.indexOf('http') == 0 ? url : url.indexOf('/api') == 0 || url.indexOf('/xczin') == 0 || url.indexOf('/xc_uc') == 0 ? domain + url : baseUrl + url;
         url = joinUrl(url);
         fetch(url, options);
@@ -51,10 +51,10 @@ class Request {
      * @param {*} url
      * @param {*} options
      */
-    async _fetch(url, options, retry) {
+    async _fetch(url: string, options?: any, retry?: number) {
         // log("发起请求", options, url);
-        let res;
-        let count = 1;
+        let res: any;
+        let count: number = 1;
         url = url.replace(/undefined/g, '');
         try {
             res = await Promise.race([
@@ -82,7 +82,7 @@ class Request {
      * @param {*} res
      * @param {*} url
      */
-    async _jsonFactory(res, url, options) {
+    async _jsonFactory(res: any, url?: string, options?: any) {
         let json;
         let txt = '';
         try {
@@ -103,7 +103,7 @@ class Request {
     }
 
     //处理text数据
-    async _textFactory(res, url, options) {
+    async _textFactory(res: any, url?: string, options?: any) {
         let txt = '';
         try {
             txt = await res.text();
@@ -112,27 +112,11 @@ class Request {
         }
         return txt;
     }
-
-    _checkPage(page) {
-        if (!page) return 'Unknown';
-        let allPage =
-            'ShopPage,Subject,ChannelPage,' +
-            'InvitePage,GGModal,SearchPage,DetailPage,' +
-            'ShoppingCartPage,ShoppingCartContentPage,' +
-            'SubmitPage,PayFailResult,OrderDetailPage,' +
-            'OrderListPage,GroupOn,GoldPage,CouponPage,ProfilePage';
-
-        if (allPage.indexOf(page) > -1) {
-            return page;
-        }
-
-        return 'Unknown';
-    }
     /**
      * get请求
      * @param {*} url
      */
-    async get(url: string, data?, retry?) {
+    async get(url: string, data?: any, retry?: number) {
         // this._pre_validity(url, data)
 
         if (data) data = urlEncoded(data);
@@ -157,7 +141,7 @@ class Request {
      * @param {*} url
      * @param {*} data
      */
-    async post(url: string, data?: object, retry?: number) {
+    async post(url: string, data?: any, retry?: number) {
         // this._pre_validity(url, data)
 
         // if (url.indexOf('?') < 0) {
@@ -188,7 +172,7 @@ class Request {
      * @param retry
      * @returns {Promise<*>}
      */
-    async postJson(url, data, retry) {
+    async postJson(url: string, data?: any, retry?: number) {
 
         // if (url.indexOf('?') < 0) {
         //     url += '?' + params;
@@ -215,7 +199,7 @@ class Request {
     /**
      * 简单的发送请求
      */
-    trackData(url, data) {
+    trackData(url: string, data: any) {
         if (data) data = urlEncoded(data);
         if (url.indexOf('?') < 0 && data) url += '?' + data;
         this._push(
@@ -229,7 +213,7 @@ class Request {
         );
     }
 
-    async trackGet(url, data, retry) {
+    async trackGet(url: string, data: any, retry: number) {
         // this._pre_validity(url, data)
         if (data) data = urlEncoded(data);
         if (url.indexOf('?') < 0 && data) url += '?' + data;
@@ -244,22 +228,12 @@ class Request {
             retry
         );
     }
-    async track(methods, trackObj, { url, data, retry }) {
-        let method =
-            typeof methods === 'string' &&
-                (methods === 'get' || methods === 'post')
-                ? methods.toLowerCase()
-                : methods;
-        let params = Object.assign(trackObj, data);
-        let res = await this[method](url, params, retry);
-        return res;
-    }
     /**
      * 上传图片
      * @param {*} url
      * @param {*} data
      */
-    async uploadImage(url, data) {
+    async uploadImage(url: string, data: any) {
 
         return this._request(url, {
             method: 'POST',
@@ -283,7 +257,7 @@ const post = async (url: string, data?: object) => {
 export { post, get }
 
 let sleep = (time: number) => new Promise(a => setTimeout(a, time));
-function joinUrl(url) {
+function joinUrl(url: string) {
     if (url.indexOf('http') === 0) return url;
     let host = domain;
     if (url.indexOf(url) === 0) host = domain;
@@ -294,7 +268,7 @@ function joinUrl(url) {
  * 混合参数
  * @param {*} data
  */
-let urlEncoded = (data: object) => {
+let urlEncoded = (data: any) => {
     if (typeof data == 'string') return encodeURIComponent(data);
     let params = [];
     for (let k in data) {
@@ -306,3 +280,9 @@ let urlEncoded = (data: object) => {
     }
     return params.join('&');
 };
+
+interface props {
+    url?: string,
+    data?: any,
+    retry?: number
+}

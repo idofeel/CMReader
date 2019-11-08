@@ -15,6 +15,7 @@ interface Item {
   cleurl: string;
   title: string;
   size: string;
+  exist: boolean
 }
 
 const DATAS: Item[] = [];
