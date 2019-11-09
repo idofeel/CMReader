@@ -1,16 +1,19 @@
 import React, { Component } from 'react'
 import ChatList from '../../chat_list';
 import { SafeAreaView, View, ScrollView, Text, NativeModules } from 'react-native';
-import { Tabs, ListView } from '@ant-design/react-native';
+import { Tabs, ListView, Toast, ActivityIndicator } from '@ant-design/react-native';
 import { get } from '../../utils/request';
 import ChatItem from '../../chat_item';
+import Empty from '../../components/empty';
+
 const CMR = NativeModules.CMRRNModule;
 
 interface Props {
     navigation?: any
 }
 interface State {
-    categorys: categorys[]
+    categorys: categorys[];
+    loadEnd: Boolean
 }
 interface category {
     cateid: string;     // 分类id
@@ -35,45 +38,66 @@ interface categorys {
 export default class HomePage extends Component<Props, State> {
     state = {
         categorys: [],
+        loadEnd: false,
         layout: 'list',
     }
 
     render() {
-        const { categorys } = this.state
-        if (!categorys.length) return null;
+        const { categorys, loadEnd } = this.state
         return (
             <SafeAreaView style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                 <View style={{ flex: 2 }}>
-                    <Tabs
-                        tabs={categorys}
-                        initialPage={0}
-                        tabBarPosition="top"
-                    >
-                        {categorys.map((item, index) => {
-                            return <ListView
-                                key={index}
-                                onFetch={(page, startFetch, abortFetch) => this.onFetch(page, index, startFetch, abortFetch)}
-                                renderItem={this.renderItem.bind(this)}
-                                numColumns={1}
-                            />
-                        })}
-                    </Tabs>
+                    {/* {!loadEnd ? <ActivityIndicator text="正在加载" color="#000" /> : null} */}
+                    {
+                        categorys.length ?
+
+                            <Tabs
+                                tabs={categorys}
+                                initialPage={0}
+                                tabBarPosition="top"
+                            >
+                                {categorys.map((item, index) => {
+                                    return <ListView
+                                        key={index}
+                                        onFetch={(page, startFetch, abortFetch) => this.onFetch(page, index, startFetch, abortFetch)}
+                                        renderItem={this.renderItem.bind(this)}
+                                        numColumns={1}
+                                    />
+                                })}
+                            </Tabs> : <Empty onReload={this.reload.bind(this)} />
+                    }
                 </View>
             </SafeAreaView>
 
         )
     }
-    async componentWillMount() {
-        const res = await get('http://fm.aijk.xyz/?act=publicres&f=json&serverid=yh');
-        const categorys: categorys[] = res.map((item: category) => {
-            return {
-                title: item.catename,
-                cateid: item.cateid,
-                category: item.item,
-            }
-        })
-        this.setState({ categorys });
-        await this.getCLEFileIsExist(categorys)
+
+
+    componentDidMount() {
+        this.getData();
+    }
+    reload() {
+        this.getData();
+        // Toast.loading('hhhhhhh...', 1, () => {
+        //     console.log('Load complete !!!');
+        // })
+    }
+    async getData() {
+        try {
+            const res = await get('http://fm.aijk.xyz/?act=publicres&f=json&serverid=yh');
+            const categorys: categorys[] = res.map((item: category) => {
+                return {
+                    title: item.catename,
+                    cateid: item.cateid,
+                    category: item.item,
+                }
+            })
+            this.setState({ categorys, loadEnd: true });
+            await this.getCLEFileIsExist(categorys)
+        } catch (error) {
+            console.log(error)
+        }
+
     }
 
     getCLEFileIsExist(categorys: categorys[]) {

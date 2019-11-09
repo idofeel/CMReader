@@ -29,7 +29,6 @@ import {
 
 import ChatList from './src/chat_list';
 import Test from './src/tset';
-import BasicTabBarExample from './src/BotttomBar/TabBar';
 import { Button } from '@ant-design/react-native';
 
 
@@ -38,7 +37,6 @@ const App = () => {
 		<>
 			<StatusBar barStyle="default" />
 			{/* <SafeAreaView></SafeAreaView> */}
-			<BasicTabBarExample />
 		</>
 	);
 };
