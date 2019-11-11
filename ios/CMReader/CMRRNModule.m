@@ -30,12 +30,13 @@ RCT_EXPORT_MODULE(CMRRNModule)
 
 /******* RN Call iOS *******/
 
-// 1.获取File是否存在，供RN刷新列表使用
+// 1.获取File是否存在,参数为json数组(如果是单个文件，也放到数组里）
 RCT_EXPORT_METHOD(IsExistCLEFile:(NSString *)msg:(RCTResponseSenderBlock)callback){
   [self showAlert:@"IsExistCLEFile" withMessage:msg cancleBlock:^{
     
   } confirmBlock:^{
-    callback(@[[NSNull null], @(YES)]);
+    NSString* backString = @"{[{\"serverid\":\"7984321\",\"contentid\":\"1_3\",cateid:\"1\",\"exist\":true}]}";
+    callback(@[[NSNull null], backString]);
   }];
 }
 
@@ -44,7 +45,7 @@ RCT_EXPORT_METHOD(GetDeviceID:(RCTResponseSenderBlock)callback){
   [self showAlert:@"GetDeviceID" withMessage:@"" cancleBlock:^{
     
   } confirmBlock:^{
-    callback(@[[NSNull null], @(YES)]);
+    callback(@[[NSNull null], @"12312341243"]);
   }];
 }
 
@@ -53,7 +54,7 @@ RCT_EXPORT_METHOD(DownloadAndOpenCLEFile:(NSString *)msg:(RCTResponseSenderBlock
   [self showAlert:@"DownloadAndOpenCLEFile" withMessage:msg cancleBlock:^{
     
   } confirmBlock:^{
-     callback(@[[NSNull null], @(YES)]);
+     callback(@[[NSNull null], @(0)]);
   }];
 }
 
@@ -62,37 +63,10 @@ RCT_EXPORT_METHOD(OpenCLEFile:(NSString *)msg:(RCTResponseSenderBlock)callback){
     [self showAlert:@"已经调用到原生OpenCLEFile" withMessage:msg cancleBlock:^{
         
     } confirmBlock:^{
-        callback(@[[NSNull null], @(YES)]);
+        callback(@[[NSNull null], @(0)]);
     }];
 }
 
-
-RCT_EXPORT_METHOD(RemoveCMRFile:(NSString *)msg:(RCTResponseSenderBlock)callback){
-    /*
-     {"content":[{"name":"雪地摩托"},{"name":"自行车"}]}
-     */
-    [self showAlert:@"已经调用到原生RemoveCMRFile" withMessage:msg cancleBlock:^{
-        
-    } confirmBlock:^{
-        callback(@[[NSNull null], @(YES)]);
-    }];
-    /*([[NSNotificationCenter defaultCenter] postNotificationName:REMOVE_CMRFile
-                                                        object:msg
-                                                      userInfo:nil];*/
-}
-
-RCT_EXPORT_METHOD(GetCMRFileExist:(NSString *)msg:(RCTResponseSenderBlock)callback){
-    /*
-     {"content":[{"name":"雪地摩托"},{"name":"自行车"}]}
-     */
-    [self showAlert:@"已经调用到原生GetCMRFileExist" withMessage:msg cancleBlock:^{
-        
-    } confirmBlock:^{
-        // 模拟RN调用GetCMRFileExist，原生再回调给RN test 消息
-        NSString* test = @"{\"content\":[{\"name\":\"雪地摩托\",\"exist\":true},{\"name\":\"自行车\",\"exist\":true}]}";
-        callback(@[test, @(YES)]);
-    }];
-}
 
 /******* iOS Call RN *******/
 - (void)startObserving {
