@@ -15,7 +15,9 @@ interface Item {
   cleurl: string;
   title: string;
   size: string;
-  exist: boolean
+  exist: boolean;
+  serverid: string;
+  lesurl: string | null;
 }
 
 const DATAS: Item[] = [];

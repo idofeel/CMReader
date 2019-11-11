@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { Component } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import { Icon } from '@ant-design/react-native';
+import { Icon, Toast, Portal } from '@ant-design/react-native';
+import NativeAPI from './API/NativeAPI';
 
 interface Item {
 	imageurl: string;
@@ -10,44 +11,68 @@ interface Item {
 	title: string;
 	size: string;
 	exist: boolean;
+	serverid: string;
+	lesurl: string | null;
 }
 interface State { }
 interface Props {
-	navigation?: any,
+	navigation?: any;
 	item: Item;
+	onPress?: (a: Item) => any;
 }
 
 class ChatItem extends Component<Props, State> {
 	render() {
-		const { item } = this.props;
+		const { item, onPress } = this.props;
 		return (
 			<TouchableOpacity
-				onPress={(e) => {
+				onPress={e => {
 					// alert('打开' + item.title);
 					// this.props.navigation.navigate('Test1')
-					console.log(this.props)
-
-
+					this.openCLE(item)
 				}}>
 				<View style={styles.container}>
-					<Image
-						source={{ uri: item.imageurl }}
-						style={styles.headerImg}
-					/>
+					<Image source={{ uri: item.imageurl }} style={styles.headerImg} />
 					<View style={styles.contentView}>
 						<Text style={styles.titleText}>{item.title}</Text>
-						<Text style={styles.timeText}>
-							文件大小{item.size}
-						</Text>
+						<Text style={styles.timeText}>文件大小{item.size}</Text>
 						{/* <Text style={styles.contentText}>
 							文件大小{item.size}
 						</Text> */}
 					</View>
-					{item.exist ? <Icon name="check-circle" color="green" /> : <Icon name="download" color="#666" />}
+					{item.exist ? (
+						<Icon name="check-circle" color="green" />
+					) : (
+							<Icon name="download" color="#666" />
+						)}
 				</View>
 				<View style={styles.spliteLine} />
 			</TouchableOpacity>
 		);
+	}
+
+	openCLE(item: Item) {
+		item.exist ? this.openCLEFile(item) : this.download(item);
+	}
+	async openCLEFile(item: Item) {
+		Toast.loading('打开中,请稍后...');
+		try {
+			const res = await NativeAPI.OPEN_CLE_FILE(item);
+			if (res !== 0) Toast.loading('打开失败');
+		} catch (error) {
+			Toast.loading('重试尝试打开');
+			this.download(item);
+		}
+	}
+
+	async download(item: Item) {
+		Toast.loading('下载打开中,请稍后...', 5);
+		try {
+			const res = await NativeAPI.DOWN_CLE_FILE(item);
+			if (res !== 0) Toast.loading('打开失败');
+		} catch (error) {
+			Toast.loading(error);
+		}
 	}
 }
 

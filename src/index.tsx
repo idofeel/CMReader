@@ -5,7 +5,7 @@ import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import Test from './tset';
 import Header from './components/Header';
-import { Drawer, Button, WhiteSpace } from '@ant-design/react-native';
+import { Drawer, Button, WhiteSpace, Provider } from '@ant-design/react-native';
 import HomePage from './pages/HomePage/HomePage';
 
 interface State { }
@@ -103,13 +103,15 @@ class App extends React.Component<Props, State>{
     navigator: any
     render() {
         return (
-            <AppContainer
-                ref={nav => {
-                    this.navigator = nav;
-                }}
-                onNavigationStateChange={() => {
-                }}
-            />
+            <Provider>
+                <AppContainer
+                    ref={nav => {
+                        this.navigator = nav;
+                    }}
+                    onNavigationStateChange={() => {
+                    }}
+                />
+            </Provider>
         );
     }
     componentDidMount() {
