@@ -12,8 +12,8 @@
 
 
 // 获取File是否存在IsExistCLEFile，参数为json数组(如果是单个文件，也放到数组里）
-// {[{"serverid":"7984321","contentid":"1_3",cateid:"1"}, {"serverid":"7984321","contentid":"1_4",cateid:"1"},  {"serverid":"7984321","contentid":"1_5",cateid:"1"}]}
-// 返回： {[{"serverid":"7984321","contentid":"1_3",cateid:"1" "exist":true}, {"serverid":"7984321","contentid":"1_4",cateid:"1","exist":true},  {"serverid":"7984321","contentid":"1_5",cateid:"1","exist":false}]}
+// [{"serverid":"7984321","contentid":"1_3",cateid:"1"}, {"serverid":"7984321","contentid":"1_4",cateid:"1"},  {"serverid":"7984321","contentid":"1_5",cateid:"1"}]
+// 返回： [{"serverid":"7984321","contentid":"1_3",cateid:"1" "exist":true}, {"serverid":"7984321","contentid":"1_4",cateid:"1","exist":true},  {"serverid":"7984321","contentid":"1_5",cateid:"1","exist":false}]
 
 #define IS_EXIST_CLEFILE                @"IsExistCLEFile"
 
