@@ -46,8 +46,10 @@ RCT_EXPORT_METHOD(IsExistCLEFile:(id)msg:(RCTResponseSenderBlock)callback){
         }
         [returnedArray addObject:dic];
       }
-      
-      callback(@[[NSNull null], returnedArray]);
+      NSString* backString = @"[{\"serverid\":\"7984321\",\"contentid\":\"1_3\",cateid:\"1\",\"exist\":true}]";
+      callback(@[[NSNull null], backString]);
+
+     // callback(@[[NSNull null], returnedArray]);
     } else if ([msg isKindOfClass:[NSString class]]) {
       NSString* backString = @"[{\"serverid\":\"7984321\",\"contentid\":\"1_3\",cateid:\"1\",\"exist\":true}]";
       callback(@[[NSNull null], backString]);
