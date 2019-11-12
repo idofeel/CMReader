@@ -35,12 +35,10 @@
 // 5.备用：RN调用CMReader删除本地文件
 //#define REMOVE_CLEFile                  @"RemoveCLEFile"
 // 删除参数样例,传递数组
-// {"content":[{"contentid":"1_2"},{"contentid":"1_3"}]}
+// [{"contentid":"1_2"},{"contentid":"1_3"}]
 
 // 6.备用：CMReader回传到RN的消息名称，供RN刷新列表使用
 #define CMREADER_EVENTNAME              @"CMReaderEvent"
-// 返回文件是否存在样例，传递数组
-// {"content":[{"contentid":"1_2","exist":false},{"contentid":"1_3","exist":true}]}
 
 
 // 参数名：

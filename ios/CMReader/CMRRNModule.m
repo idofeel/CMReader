@@ -31,12 +31,27 @@ RCT_EXPORT_MODULE(CMRRNModule)
 /******* RN Call iOS *******/
 
 // 1.获取File是否存在,参数为json数组(如果是单个文件，也放到数组里）
-RCT_EXPORT_METHOD(IsExistCLEFile:(NSString *)msg:(RCTResponseSenderBlock)callback){
+RCT_EXPORT_METHOD(IsExistCLEFile:(id)msg:(RCTResponseSenderBlock)callback){
   [self showAlert:@"IsExistCLEFile" withMessage:msg cancleBlock:^{
     
   } confirmBlock:^{
-    NSString* backString = @"{[{\"serverid\":\"7984321\",\"contentid\":\"1_3\",cateid:\"1\",\"exist\":true}]}";
-    callback(@[[NSNull null], backString]);
+    if ([msg isKindOfClass:[NSArray class]]) {
+      NSArray* array = (NSArray*)msg;
+      NSMutableArray* returnedArray = [[NSMutableArray alloc] init];
+      int i = 0;
+      for (NSDictionary* item in array) {
+        NSMutableDictionary* dic = [NSMutableDictionary dictionaryWithDictionary:item];
+        if (i == 0) {
+          [dic setObject:@(true) forKey:KEY_EXIST];
+        }
+        [returnedArray addObject:dic];
+      }
+      
+      callback(@[[NSNull null], returnedArray]);
+    } else if ([msg isKindOfClass:[NSString class]]) {
+      NSString* backString = @"[{\"serverid\":\"7984321\",\"contentid\":\"1_3\",cateid:\"1\",\"exist\":true}]";
+      callback(@[[NSNull null], backString]);
+    }
   }];
 }
 
@@ -50,19 +65,24 @@ RCT_EXPORT_METHOD(GetDeviceID:(RCTResponseSenderBlock)callback){
 }
 
 // 3.下载并打开CLE文件和证书文件
-RCT_EXPORT_METHOD(DownloadAndOpenCLEFile:(NSString *)msg:(RCTResponseSenderBlock)callback){
+// 返回值： 1表示下载成功，0表示下载失败。
+
+RCT_EXPORT_METHOD(DownloadAndOpenCLEFile:(id)msg:(RCTResponseSenderBlock)callback){
   [self showAlert:@"DownloadAndOpenCLEFile" withMessage:msg cancleBlock:^{
     
   } confirmBlock:^{
-     callback(@[[NSNull null], @(0)]);
+    //这里返回了一个成功，请RN得到1之后，刷新当前点击的模型是否存在和不存在的图标
+     callback(@[[NSNull null], @(1)]);
   }];
 }
 
 // 4.RN调用打开CMReader消息名称
-RCT_EXPORT_METHOD(OpenCLEFile:(NSString *)msg:(RCTResponseSenderBlock)callback){
+// 0 表示打开成功，其它表示失败，具体错误信息以后描述。
+RCT_EXPORT_METHOD(OpenCLEFile:(id)msg:(RCTResponseSenderBlock)callback){
     [self showAlert:@"已经调用到原生OpenCLEFile" withMessage:msg cancleBlock:^{
         
     } confirmBlock:^{
+      // 这里统一都返回0
         callback(@[[NSNull null], @(0)]);
     }];
 }
