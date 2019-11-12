@@ -29,7 +29,7 @@ class ChatItem extends Component<Props, State> {
 				onPress={e => {
 					// alert('打开' + item.title);
 					// this.props.navigation.navigate('Test1')
-					this.openCLE(item)
+					this.openCLE(item);
 				}}>
 				<View style={styles.container}>
 					<Image source={{ uri: item.imageurl }} style={styles.headerImg} />
@@ -59,6 +59,7 @@ class ChatItem extends Component<Props, State> {
 		try {
 			const res = await NativeAPI.OPEN_CLE_FILE(item);
 			if (res !== 0) Toast.loading('打开失败');
+
 		} catch (error) {
 			Toast.loading('重试尝试打开');
 			this.download(item);

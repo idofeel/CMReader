@@ -78,7 +78,7 @@ export default class HomePage extends Component<Props, State> {
             </SafeAreaView>
         );
     }
-    async componentWillMount() {
+    async UNSAFE_componentWillMount() {
         const res = await get(
             'http://fm.aijk.xyz/?act=publicres&f=json&serverid=yh',
         );
@@ -115,8 +115,13 @@ export default class HomePage extends Component<Props, State> {
         cateData: cateData[],
         categorys: categorys[] = this.state.categorys,
     ) {
-        const newCate = await this.getCLEFileIsExist(cateData);
-        if (newCate) categorys[pageNum].category = newCate;
+        try {
+            console.log('newCate')
+            const newCate = await this.getCLEFileIsExist(cateData);
+            if (newCate) categorys[pageNum].category = newCate;
+        } catch (error) {
+            // t
+        }
         this.setState({ categorys, initialPage: pageNum });
     }
 
@@ -130,8 +135,8 @@ export default class HomePage extends Component<Props, State> {
         if (!CMR || cateData.length < 1) return cateData;
         try {
             return await new Promise((resolve, reject) => {
-                CMR.IsExistCLEFile(JSON.stringify(cateData), (err: any, res: any) => {
-                    err ? reject(err) : resolve(JSON.parse(res));
+                CMR.IsExistCLEFile(cateData, (err: any, res: any) => {
+                    err ? reject(err) : resolve(res);
                 });
             });
         } catch (error) {
