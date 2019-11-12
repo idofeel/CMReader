@@ -130,8 +130,8 @@ export default class HomePage extends Component<Props, State> {
         if (!CMR || cateData.length < 1) return cateData;
         try {
             return await new Promise((resolve, reject) => {
-                CMR.IsExistCLEFile(JSON.stringify(cateData), (err: any, res: any) => {
-                    err ? reject(err) : resolve(JSON.parse(res));
+                CMR.IsExistCLEFile(cateData, (err: any, res: any) => {
+                    err ? reject(err) : resolve(res);
                 });
             });
         } catch (error) {
