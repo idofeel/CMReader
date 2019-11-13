@@ -19,6 +19,7 @@ interface Props {
 	navigation?: any;
 	item: Item;
 	onPress?: (a: Item) => any;
+	refresh: () => any;
 }
 
 class ChatItem extends Component<Props, State> {
@@ -29,7 +30,7 @@ class ChatItem extends Component<Props, State> {
 				onPress={e => {
 					// alert('打开' + item.title);
 					// this.props.navigation.navigate('Test1')
-					this.openCLE(item)
+					this.openCLE(item);
 				}}>
 				<View style={styles.container}>
 					<Image source={{ uri: item.imageurl }} style={styles.headerImg} />
@@ -69,7 +70,11 @@ class ChatItem extends Component<Props, State> {
 		Toast.loading('下载打开中,请稍后...', 5);
 		try {
 			const res = await NativeAPI.DOWN_CLE_FILE(item);
-			if (res !== 0) Toast.loading('打开失败');
+			if (res === 1) {
+				this.props.refresh();
+			} else {
+				Toast.loading('打开失败');
+			}
 		} catch (error) {
 			Toast.loading(error);
 		}

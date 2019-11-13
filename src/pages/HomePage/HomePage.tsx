@@ -10,6 +10,7 @@ import {
 import { Tabs, ListView } from '@ant-design/react-native';
 import { get } from '../../utils/request';
 import ChatItem from '../../chat_item';
+
 const CMR = NativeModules.CMRRNModule;
 
 interface Props {
@@ -96,7 +97,7 @@ export default class HomePage extends Component<Props, State> {
     }
 
     // 初次渲染文件是否存在
-    async initGetCLEFileIsExist(categorys: categorys[]) {
+    async initGetCLEFileIsExist(categorys: categorys[] = this.state.categorys) {
         const { initialPage } = this.state;
         const { category } = categorys[initialPage] || {};
         if (category && category.length > 0) {
@@ -106,8 +107,7 @@ export default class HomePage extends Component<Props, State> {
 
     // 首页切换分类查找文件是否存在
     async onChange(item: categorys, index: number) {
-        console.log(item)
-        // this.setCurrentCateData(index, item.category, this.state.categorys);
+        this.setCurrentCateData(index, item.category, this.state.categorys);
     }
 
     async setCurrentCateData(
@@ -117,6 +117,10 @@ export default class HomePage extends Component<Props, State> {
     ) {
         const newCate = await this.getCLEFileIsExist(cateData);
         if (newCate) categorys[pageNum].category = newCate;
+
+        if (this.reload) this.setState({ categorys: [] }, () => {
+            this.setState({ categorys, initialPage: pageNum });
+        })
         this.setState({ categorys, initialPage: pageNum });
     }
 
@@ -138,10 +142,15 @@ export default class HomePage extends Component<Props, State> {
             return cateData;
         }
     }
+    reload = false;
+    async refresh() {
+        this.reload = true;
+        this.initGetCLEFileIsExist();
+    }
 
     renderItem(item: cateData, index: number) {
         return (
-            <ChatItem item={item} key={index} navigation={this.props.navigation} />
+            <ChatItem item={item} key={index} navigation={this.props.navigation} refresh={() => this.refresh()} />
         );
     }
 
