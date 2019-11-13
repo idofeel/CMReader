@@ -15,7 +15,6 @@
   "dependencies": {
     "@ant-design/icons-react-native": "^1.0.2",
     "@ant-design/react-native": "^3.2.0",
-    "@babel/plugin-proposal-decorators": "^7.7.0",
     "@react-native-community/viewpager": "^2.0.2",
     "@types/react": "^16.9.11",
     "@types/react-native": "^0.60.22",
@@ -35,6 +34,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.7.2",
+    "@babel/plugin-proposal-decorators": "^7.7.0",
     "@babel/runtime": "^7.7.2",
     "@react-native-community/eslint-config": "^0.0.5",
     "babel-jest": "^24.9.0",
@@ -47,15 +47,5 @@
   },
   "jest": {
     "preset": "react-native"
-  },
-  "babel": {
-    "plugins": [
-      [
-        "@babel/plugin-proposal-decorators",
-        {
-          "legacy": true
-        }
-      ]
-    ]
   }
 }

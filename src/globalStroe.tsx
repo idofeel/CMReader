@@ -10,6 +10,7 @@ class stroe {
         avatar: '',
         userid:''
     }
+
 }
 
 export default new stroe()
