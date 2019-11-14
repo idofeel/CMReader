@@ -5,7 +5,7 @@ import {
     FlatList,
     Text,
 } from 'react-native';
-import { Tabs } from '@ant-design/react-native';
+import { Tabs, Toast } from '@ant-design/react-native';
 import { get } from '../../utils/request';
 import ChatItem from '../../chat_item';
 import { inject, observer } from 'mobx-react';
@@ -16,12 +16,13 @@ const CMR = NativeModules.CMRRNModule;
 interface Props {
     // navigation?: any;
     homeStroe?: any
+    globalStroe?: any;
 }
 interface State {
     categorys: categorys[];
     initialPage: number;
     layout: string
-    refreshing:boolean;
+    refreshing: boolean;
 }
 interface category {
     cateid: string; // 分类id
@@ -46,6 +47,7 @@ interface categorys {
     category: cateData[];
 }
 
+@inject('globalStroe')
 @inject('homeStroe')
 @observer
 export default class HomePage extends Component<Props, State> {
@@ -56,10 +58,10 @@ export default class HomePage extends Component<Props, State> {
             categorys,
             initialPage,
             layout: 'list',
-            refreshing:false,
+            refreshing: false,
         }
     }
-    pageIndex:number = -1 ; // android分类切换多次操作
+    pageIndex: number = -1; // android分类切换多次操作
     render() {
         const { initialPage, categorys } = this.props.homeStroe
         const { refreshing } = this.state;
@@ -90,8 +92,8 @@ export default class HomePage extends Component<Props, State> {
         );
     }
 
-    listFooter(){
-        return <Text style={{textAlign:'center',color:'#ccc',paddingVertical: 10}}>已加载完全部</Text>
+    listFooter() {
+        return <Text style={{ textAlign: 'center', color: '#ccc', paddingVertical: 10 }}>已加载完全部</Text>
     }
 
     async componentDidMount() {
@@ -106,6 +108,7 @@ export default class HomePage extends Component<Props, State> {
             };
         });
         this.initGetCLEFileIsExist(categorys);
+        this.props.globalStroe.removeloading();
     }
     // 初次渲染文件是否存在
     async initGetCLEFileIsExist(categorys: categorys[]) {
@@ -116,11 +119,11 @@ export default class HomePage extends Component<Props, State> {
         }
     }
 
-    onRefresh(){
+    onRefresh() {
         return true
     }
 
-   
+
 
     // 首页切换分类查找文件是否存在
     async onChange(item: categorys, index: number) {

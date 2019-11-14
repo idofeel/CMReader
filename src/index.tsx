@@ -5,7 +5,7 @@ import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import Test from './tset';
 import Header from './components/Header';
-import { Drawer, Button, WhiteSpace, Provider } from '@ant-design/react-native';
+import { Drawer, Button, WhiteSpace, Provider, Toast, Portal } from '@ant-design/react-native';
 import HomePage from './pages/HomePage';
 import { observer, Provider as MobxProvider } from 'mobx-react';
 import stroe from './globalStroe';
@@ -106,14 +106,17 @@ class App extends React.Component<Props, State> {
                         ref={nav => {
                             this.navigator = nav;
                         }}
-                        onNavigationStateChange={() => { }}
+                        onNavigationStateChange={this.routerChange.bind(this)}
                     />
                 </MobxProvider>
             </Provider>
         );
     }
     componentDidMount() {
-        // console.log(this.navigator)
+        stroe.toastloading(0);
+    }
+    routerChange() {
+        console.log(...arguments)
     }
 }
 
