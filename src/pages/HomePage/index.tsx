@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {
     SafeAreaView,
     NativeModules,
+    StatusBar
 } from 'react-native';
 import { inject, observer, Provider } from 'mobx-react';
 
@@ -48,6 +49,7 @@ export default class IndexPage extends Component<Props, State> {
     render() {
         return (
             <Provider homeStroe={this.store}>
+                <StatusBar barStyle="dark-content" />
                 <SafeAreaView
                     style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                     <HomePage />
