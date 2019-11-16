@@ -62,33 +62,33 @@ class ChatItem extends Component<Props, State> {
 	}
 
 	async openCLEFile(item: Item, index: number) {
-		Toast.loading('打开中,请稍后...');
+		// Toast.loading('打开中,请稍后...');
 		try {
 			const res = await NativeAPI.OPEN_CLE_FILE(item);
 			if (res === 1) {
 
 			} else {
-				Toast.loading('打开失败');
+				// Toast.loading('打开失败');
 			};
 
 		} catch (error) {
-			Toast.loading('重试尝试打开');
+			Toast.loading(error);
 			this.download(item, index);
 		}
 	}
 
 	async download(item: Item, index: number) {
-		const downloading = Toast.loading('下载打开中,请稍后...', 5);
+		// const downloading = Toast.loading('下载打开中,请稍后...', 5);
 		try {
 			const res = await NativeAPI.DOWN_CLE_FILE(item);
 			if (res === 1) {
 				const { initialPage, categorys } = this.props.homeStroe;
-				Portal.remove(downloading);
+				// Portal.remove(downloading);
 				let newCategorys = toJS(categorys)
 				newCategorys[initialPage].category[index]['exist'] = true;
 				this.props.homeStroe.refresh(newCategorys);
 			} else {
-				Toast.loading('打开失败');
+				// Toast.loading('打开失败');
 			}
 		} catch (error) {
 			Toast.loading(error);
