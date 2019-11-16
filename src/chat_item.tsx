@@ -1,8 +1,10 @@
 import * as React from 'react';
 import { Component } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { toJS } from 'mobx';
+import { View, Text, StyleSheet, Image, TouchableOpacity, AsyncStorage } from 'react-native';
 import { Icon, Toast, Portal } from '@ant-design/react-native';
 import NativeAPI from './API/NativeAPI';
+import { inject } from 'mobx-react';
 
 interface Item {
 	imageurl: string;
@@ -17,20 +19,22 @@ interface Item {
 interface State { }
 interface Props {
 	navigation?: any;
+	homeStroe?: any;
 	item: Item;
+	index: number;
 	onPress?: (a: Item) => any;
-	refresh: () => any;
 }
 
+@inject('homeStroe')
 class ChatItem extends Component<Props, State> {
 	render() {
-		const { item, onPress } = this.props;
+		const { item, onPress, index } = this.props;
 		return (
 			<TouchableOpacity
 				onPress={e => {
 					// alert('打开' + item.title);
 					// this.props.navigation.navigate('Test1')
-					this.openCLE(item);
+					this.openCLE(item, index);
 				}}>
 				<View style={styles.container}>
 					<Image source={{ uri: item.imageurl }} style={styles.headerImg} />
@@ -52,28 +56,39 @@ class ChatItem extends Component<Props, State> {
 		);
 	}
 
-	openCLE(item: Item) {
-		item.exist ? this.openCLEFile(item) : this.download(item);
+	async openCLE(item: Item, index: number) {
+		const params = toJS(item);
+		item.exist ? this.openCLEFile(params, index) : this.download(params, index);
 	}
-	async openCLEFile(item: Item) {
-		Toast.loading('打开中,请稍后...');
+
+	async openCLEFile(item: Item, index: number) {
+		// Toast.loading('打开中,请稍后...');
 		try {
 			const res = await NativeAPI.OPEN_CLE_FILE(item);
-			if (res !== 0) Toast.loading('打开失败');
+			if (res === 1) {
+
+			} else {
+				// Toast.loading('打开失败');
+			};
+
 		} catch (error) {
-			Toast.loading('重试尝试打开');
-			this.download(item);
+			Toast.loading(error);
+			this.download(item, index);
 		}
 	}
 
-	async download(item: Item) {
-		Toast.loading('下载打开中,请稍后...', 5);
+	async download(item: Item, index: number) {
+		// const downloading = Toast.loading('下载打开中,请稍后...', 5);
 		try {
 			const res = await NativeAPI.DOWN_CLE_FILE(item);
 			if (res === 1) {
-				this.props.refresh();
+				const { initialPage, categorys } = this.props.homeStroe;
+				// Portal.remove(downloading);
+				let newCategorys = toJS(categorys)
+				newCategorys[initialPage].category[index]['exist'] = true;
+				this.props.homeStroe.refresh(newCategorys);
 			} else {
-				Toast.loading('打开失败');
+				// Toast.loading('打开失败');
 			}
 		} catch (error) {
 			Toast.loading(error);
