@@ -59,7 +59,7 @@ class ChatItem extends Component<Props, State> {
 							<TouchableOpacity onPress={() => {
 								this.delete(item, index);
 							}}>
-								<Icon name="delete" color="#7e7e7e" style={styles.delete} />
+								<Icon name="delete" color="#ccc" style={styles.delete} />
 							</TouchableOpacity>
 							<TouchableOpacity onPress={() => {
 								this.reDownload(item, index);
@@ -85,7 +85,7 @@ class ChatItem extends Component<Props, State> {
 			{
 				text: '确认',
 				onPress: async () => {
-					this.reDownLoadCle(item, index);
+					this.reDownLoadCle(toJS(item), index);
 				},
 				style: { color: 'red' }
 			},
@@ -100,7 +100,7 @@ class ChatItem extends Component<Props, State> {
 			{
 				text: '确认',
 				onPress: async () => {
-					this.deleteCle(item, index);
+					this.deleteCle(toJS(item), index);
 				},
 				style: { color: 'red' }
 			},
@@ -114,7 +114,7 @@ class ChatItem extends Component<Props, State> {
 	async reDownLoadCle(item: Item, index: number) {
 		try {
 			await this.deleteCle(item, index);
-			this.download(item, index);
+			await this.download(item, index);
 		} catch (error) {
 			Toast.loading(error);
 		}
@@ -122,8 +122,7 @@ class ChatItem extends Component<Props, State> {
 
 	async deleteCle(item: Item, index: number) {
 		try {
-			this.refreshData(index, false);
-			const res = await NativeAPI.DELETE_CLE_FILE(item);
+			const res = await NativeAPI.DELETE_CLE_FILE(toJS(item));
 			if (res === 1) {
 				this.refreshData(index, false);
 			}
@@ -137,7 +136,7 @@ class ChatItem extends Component<Props, State> {
 	async openCLEFile(item: Item, index: number) {
 		// Toast.loading('打开中,请稍后...');
 		try {
-			await NativeAPI.OPEN_CLE_FILE(item);
+			await NativeAPI.OPEN_CLE_FILE(toJS(item));
 
 		} catch (error) {
 			Toast.loading(error);
