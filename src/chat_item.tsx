@@ -55,7 +55,7 @@ class ChatItem extends Component<Props, State> {
 									)}
 							</TouchableOpacity>
 						</View>
-						<View style={styles.reLoad}>
+						{item.exist ? <View style={styles.reLoad}>
 							<TouchableOpacity onPress={() => {
 								this.delete(item, index);
 							}}>
@@ -66,7 +66,7 @@ class ChatItem extends Component<Props, State> {
 							}}>
 								<Icon name="redo" color="#3d5fb4" />
 							</TouchableOpacity>
-						</View>
+						</View> : null}
 					</View>
 
 				</View>
