@@ -49,7 +49,7 @@ export default class IndexPage extends Component<Props, State> {
     render() {
         return (
             <Provider homeStroe={this.store}>
-                <StatusBar barStyle="dark-content" />
+                <StatusBar barStyle="dark-content" backgroundColor="#fff" />
                 <SafeAreaView
                     style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                     <HomePage />
