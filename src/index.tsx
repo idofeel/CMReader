@@ -116,7 +116,7 @@ class App extends React.Component<Props, State> {
         stroe.toastloading(0);
     }
     routerChange() {
-        console.log(...arguments)
+        // console.log(...arguments)
     }
 }
 

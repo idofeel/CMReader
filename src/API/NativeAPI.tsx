@@ -10,8 +10,6 @@ interface DownCLEFile extends CLEFile {
     lesurl: string | null;
 }
 
-
-
 class NativeAPI {
     APP_CMR = NativeModules.CMRRNModule
     init() {
@@ -32,6 +30,11 @@ class NativeAPI {
 
     async DOWN_CLE_FILE(params: DownCLEFile) {
         return await this.NativeMethod('DownloadAndOpenCLEFile', params)
+    }
+
+    async DELETE_CLE_FILE(params: CLEFile) {
+        // 1表示存在，0表示不存在。
+        return await this.NativeMethod('DeleteCLEFile', params)
     }
 
     async NativeMethod(name: string, params: any) {

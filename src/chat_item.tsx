@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Component } from 'react';
 import { toJS } from 'mobx';
 import { View, Text, StyleSheet, Image, TouchableOpacity, AsyncStorage } from 'react-native';
-import { Icon, Toast, Portal } from '@ant-design/react-native';
+import { Icon, Toast, Modal } from '@ant-design/react-native';
 import NativeAPI from './API/NativeAPI';
 import { inject } from 'mobx-react';
 
@@ -45,11 +45,30 @@ class ChatItem extends Component<Props, State> {
 							文件大小{item.size}
 						</Text> */}
 					</View>
-					{item.exist ? (
-						<Icon name="check-circle" color="green" />
-					) : (
-							<Icon name="download" color="#666" />
-						)}
+					<View style={styles.icons}>
+						<View style={styles.download}>
+							<TouchableOpacity>
+								{item.exist ? (
+									<Icon name="check-circle" color="green" />
+								) : (
+										<Icon name="download" color="#3d5fb4" onPress={(() => this.openCLE(item, index))} />
+									)}
+							</TouchableOpacity>
+						</View>
+						<View style={styles.reLoad}>
+							<TouchableOpacity onPress={() => {
+								this.delete(item, index);
+							}}>
+								<Icon name="delete" color="#7e7e7e" style={styles.delete} />
+							</TouchableOpacity>
+							<TouchableOpacity onPress={() => {
+								this.reDownload(item, index);
+							}}>
+								<Icon name="redo" color="#3d5fb4" />
+							</TouchableOpacity>
+						</View>
+					</View>
+
 				</View>
 				<View style={styles.spliteLine} />
 			</TouchableOpacity>
@@ -61,15 +80,64 @@ class ChatItem extends Component<Props, State> {
 		item.exist ? this.openCLEFile(params, index) : this.download(params, index);
 	}
 
+	reDownload(item: Item, index: number) {
+		const btns = [
+			{
+				text: '确认',
+				onPress: async () => {
+					this.reDownLoadCle(item, index);
+				},
+				style: { color: 'red' }
+			},
+			{ text: '取消' }
+
+		]
+		Modal.alert('确认重新下载并打开！', null, btns);
+	}
+
+	delete(item: Item, index: number) {
+		const btns = [
+			{
+				text: '确认',
+				onPress: async () => {
+					this.deleteCle(item, index);
+				},
+				style: { color: 'red' }
+			},
+			{ text: '取消' }
+
+		]
+		Modal.alert('确认删除文件！', null, btns);
+	}
+
+
+	async reDownLoadCle(item: Item, index: number) {
+		try {
+			await this.deleteCle(item, index);
+			this.download(item, index);
+		} catch (error) {
+			Toast.loading(error);
+		}
+	}
+
+	async deleteCle(item: Item, index: number) {
+		try {
+			this.refreshData(index, false);
+			const res = await NativeAPI.DELETE_CLE_FILE(item);
+			if (res === 1) {
+				this.refreshData(index, false);
+			}
+			this.refreshData(index, false);
+		} catch (error) {
+			// Toast.loading(error);
+			// this.download(item, index);
+		}
+	}
+
 	async openCLEFile(item: Item, index: number) {
 		// Toast.loading('打开中,请稍后...');
 		try {
-			const res = await NativeAPI.OPEN_CLE_FILE(item);
-			if (res === 1) {
-
-			} else {
-				// Toast.loading('打开失败');
-			};
+			await NativeAPI.OPEN_CLE_FILE(item);
 
 		} catch (error) {
 			Toast.loading(error);
@@ -82,17 +150,21 @@ class ChatItem extends Component<Props, State> {
 		try {
 			const res = await NativeAPI.DOWN_CLE_FILE(item);
 			if (res === 1) {
-				const { initialPage, categorys } = this.props.homeStroe;
-				// Portal.remove(downloading);
-				let newCategorys = toJS(categorys)
-				newCategorys[initialPage].category[index]['exist'] = true;
-				this.props.homeStroe.refresh(newCategorys);
+				this.refreshData(index, true);
 			} else {
 				// Toast.loading('打开失败');
 			}
 		} catch (error) {
 			Toast.loading(error);
 		}
+	}
+
+	refreshData(index: number, isExist: boolean = false) {
+		const { initialPage, categorys } = this.props.homeStroe;
+		// Portal.remove(downloading);
+		let newCategorys = toJS(categorys)
+		newCategorys[initialPage].category[index]['exist'] = isExist;
+		this.props.homeStroe.refresh(newCategorys);
 	}
 }
 
@@ -134,6 +206,21 @@ const styles = StyleSheet.create({
 		borderTopWidth: 0.5,
 		borderTopColor: '#b2b2b2',
 	},
+	icons: {
+		display: 'flex',
+		justifyContent: 'space-between',
+	},
+	reLoad: {
+		display: 'flex',
+		justifyContent: 'space-between',
+		flexDirection: 'row',
+	},
+	download: {
+		marginLeft: 'auto'
+	},
+	delete: {
+		marginRight: 10
+	}
 });
 
 export default ChatItem;
