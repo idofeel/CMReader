@@ -176,6 +176,7 @@ class ChatItem extends Component<Props, State> {
 	}
 
 	async getCompleteData(item: Item) {
+
 		const data = toJS(item);
 		const reqList = [
 			get(api.fileInfo.cle, { pid: data.contentid }), // 获取cle文件信息
@@ -186,9 +187,11 @@ class ChatItem extends Component<Props, State> {
 		const { deviceID, serverInfo = {} } = config
 		if (cleData.success && deviceID && serverInfo.serverid) {
 			data.cleurl = cle
-			const lesUrl = joinUrlEncoded(api.fileInfo.les, { pid: data.contentid, devid: serverInfo.serverid })
+			const lesUrl = joinUrlEncoded(api.fileInfo.les, { pid: data.contentid, devid: deviceID })
 			data.lesurl = joinUrl(lesUrl)
 		}
+		console.log('%c 获取数据：', 'color:red;', data);
+
 		return data
 	}
 
