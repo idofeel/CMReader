@@ -61,11 +61,12 @@ RCT_EXPORT_METHOD(IsExistCLEFile:(id)msg:(RCTResponseSenderBlock)callback){
 
 // 2.获取DeviceID
 RCT_EXPORT_METHOD(GetDeviceID:(RCTResponseSenderBlock)callback){
-  [self showAlert:@"GetDeviceID" withMessage:@"" cancleBlock:^{
+//   [self showAlert:@"GetDeviceID" withMessage:@"" cancleBlock:^{
     
-  } confirmBlock:^{
-    callback(@[[NSNull null], @"12312341243"]);
-  }];
+//   } confirmBlock:^{
+//     callback(@[[NSNull null], @"12312341243"]);
+//   }];
+   callback(@[[NSNull null], @"12312341243"]);
 }
 
 // 3.下载并打开CLE文件和证书文件

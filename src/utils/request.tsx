@@ -1,5 +1,5 @@
 
-const domain = 'http://yy.aijk.xyz/'
+const domain = 'http://fm.aijk.xyz/'
 let headers = {}
 class Request {
 
@@ -63,6 +63,7 @@ class Request {
                     setTimeout(() => reject(new Error('request timeout')), 10000);
                 })]);
         } catch (e) {
+
             throw new Error('网络连接失败，请检查网络权限');
         }
         while (retry && res.status === 420 && count < this.retryCount) {
@@ -99,6 +100,8 @@ class Request {
 
             throw new Error('网络错误，请稍后再试');
         }
+        console.log(`%c get: ${url}`, 'color:#0f0;', json);
+
         return json;
     }
 
@@ -116,7 +119,7 @@ class Request {
      * get请求
      * @param {*} url
      */
-    async get(url: string, data?: any, retry?: number) {
+    async get(url: string, data: any = {}, retry?: number) {
         // this._pre_validity(url, data)
 
         if (data) data = urlEncoded(data);
@@ -249,14 +252,18 @@ export default request;
 
 //旧方法兼容
 const get = async (url: string, data?: object) => {
+    if (url.indexOf(domain) < 0) url = domain + url;
+
     return request.get(url, data);
 };
 const post = async (url: string, data?: object) => {
     return request.post(url, data);
 };
-export { post, get }
+
+
 
 let sleep = (time: number) => new Promise(a => setTimeout(a, time));
+
 function joinUrl(url: string) {
     if (url.indexOf('http') === 0) return url;
     let host = domain;
@@ -280,6 +287,17 @@ let urlEncoded = (data: any) => {
     }
     return params.join('&');
 };
+
+const joinUrlEncoded = (url: string, data: object) => {
+    const params = urlEncoded(data)
+    if (url.indexOf("?") < 0 && params) {
+        url += "?" + params
+    } else {
+        url += "&" + params
+    }
+    return url
+}
+export { post, get, joinUrl, joinUrlEncoded }
 
 interface props {
     url?: string,

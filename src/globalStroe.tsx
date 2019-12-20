@@ -9,12 +9,14 @@ class stroe {
 
     @observable userInfo = {
         avatar: '',
-        userid: ''
+        userid: '',
+        deviceID: '', // 设备id
+        serverID: '' // 服务器id
     }
 
     @observable toast = 0
 
-    @action toastloading = (time: number) => {
+    @action loading = (time: number) => {
         if (this.toast) Portal.remove(this.toast);
         this.toast = Toast.loading('loading', time);
     }

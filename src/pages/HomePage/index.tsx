@@ -8,6 +8,7 @@ import { inject, observer, Provider } from 'mobx-react';
 
 import Store from './store';
 import HomePage from './HomePage';
+import Config from '../../utils/Config';
 
 
 const CMR = NativeModules.CMRRNModule;
@@ -56,5 +57,9 @@ export default class IndexPage extends Component<Props, State> {
                 </SafeAreaView>
             </Provider >
         );
+    }
+    componentDidMount() {
+        // 获取需要的配置信息
+        Config.init()
     }
 }

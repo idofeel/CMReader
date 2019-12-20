@@ -2,9 +2,12 @@ import * as React from 'react';
 import { Component } from 'react';
 import { toJS } from 'mobx';
 import { View, Text, StyleSheet, Image, TouchableOpacity, AsyncStorage } from 'react-native';
-import { Icon, Toast, Modal } from '@ant-design/react-native';
+import { Icon, Toast, Modal, Portal } from '@ant-design/react-native';
 import NativeAPI from './API/NativeAPI';
 import { inject } from 'mobx-react';
+import Config from './utils/Config';
+import { get, joinUrl, joinUrlEncoded } from './utils/request';
+import api from './services/api';
 
 interface Item {
 	imageurl: string;
@@ -76,7 +79,7 @@ class ChatItem extends Component<Props, State> {
 	}
 
 	async openCLE(item: Item, index: number) {
-		const params = toJS(item);
+		const params = await this.getCompleteData(item);
 		item.exist ? this.openCLEFile(params, index) : this.download(params, index);
 	}
 
@@ -85,7 +88,8 @@ class ChatItem extends Component<Props, State> {
 			{
 				text: '确认',
 				onPress: async () => {
-					this.reDownLoadCle(toJS(item), index);
+					item = await this.getCompleteData(item);
+					this.reDownLoadCle(item, index);
 				},
 				style: { color: 'red' }
 			},
@@ -122,13 +126,10 @@ class ChatItem extends Component<Props, State> {
 
 	async deleteCle(item: Item, index: number) {
 		try {
-			const res = await NativeAPI.DELETE_CLE_FILE(toJS(item));
-			if (res === 1) {
-				this.refreshData(index, false);
-			}
-			this.refreshData(index, false);
+			const res = await NativeAPI.DELETE_CLE_FILE(item);
+			this.refreshData(item, index, false);
 		} catch (error) {
-			// Toast.loading(error);
+			Toast.fail('删除文件失败！');
 			// this.download(item, index);
 		}
 	}
@@ -145,11 +146,10 @@ class ChatItem extends Component<Props, State> {
 	}
 
 	async download(item: Item, index: number) {
-		// const downloading = Toast.loading('下载打开中,请稍后...', 5);
 		try {
 			const res = await NativeAPI.DOWN_CLE_FILE(item);
 			if (res === 1) {
-				this.refreshData(index, true);
+				this.refreshData(item, index, true);
 			} else {
 				// Toast.loading('打开失败');
 			}
@@ -158,13 +158,44 @@ class ChatItem extends Component<Props, State> {
 		}
 	}
 
-	refreshData(index: number, isExist: boolean = false) {
-		const { initialPage, categorys } = this.props.homeStroe;
-		// Portal.remove(downloading);
+	async refreshData(item: cateData, index: number, isExist: boolean = false) {
+		item = JSON.parse(JSON.stringify(item))
+		const { initialPage, categorys, refresh, cateData, saveCategory, searchText } = this.props.homeStroe;
 		let newCategorys = toJS(categorys)
-		newCategorys[initialPage].category[index]['exist'] = isExist;
-		this.props.homeStroe.refresh(newCategorys);
+		let loading = Toast.loading('处理中')
+		item.exist = isExist
+		if (categorys.length) {
+			newCategorys[initialPage].category[index] = item;
+			refresh(newCategorys)
+		} else {
+			const newcategory = toJS(cateData)
+			newcategory.category[index] = item;
+			saveCategory(newcategory, searchText);
+		}
+		Portal.remove(loading);
 	}
+
+	async getCompleteData(item: Item) {
+		const data = toJS(item);
+		const reqList = [
+			get(api.fileInfo.cle, { pid: data.contentid }), // 获取cle文件信息
+			Config.get()
+		]
+		const [cleData, config] = await Promise.all(reqList)
+		const { cle, md5, filesize } = cleData.data || {}
+		const { deviceID, serverInfo = {} } = config
+		if (cleData.success && deviceID && serverInfo.serverid) {
+			data.cleurl = cle
+			const lesUrl = joinUrlEncoded(api.fileInfo.les, { pid: data.contentid, devid: serverInfo.serverid })
+			data.lesurl = joinUrl(lesUrl)
+		}
+		return data
+	}
+
+
+
+
+
 }
 
 const styles = StyleSheet.create({

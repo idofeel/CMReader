@@ -9,6 +9,7 @@ import { Drawer, Button, WhiteSpace, Provider, Toast, Portal } from '@ant-design
 import HomePage from './pages/HomePage';
 import { observer, Provider as MobxProvider } from 'mobx-react';
 import stroe from './globalStroe';
+import './@types';
 
 interface State { }
 interface Props {
@@ -46,6 +47,9 @@ class HomeScreen extends React.Component<Props, State> {
 const HomeTab = {
     Home: {
         screen: HomePage,
+        navigationOptions: {
+            title: '公共资源'
+        }
     },
 };
 
@@ -113,7 +117,7 @@ class App extends React.Component<Props, State> {
         );
     }
     componentDidMount() {
-        stroe.toastloading(0);
+        stroe.loading(0);
     }
     routerChange() {
         // console.log(...arguments)

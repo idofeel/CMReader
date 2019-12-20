@@ -17,8 +17,8 @@ class NativeAPI {
         return this;
     }
 
-    async Get_Device_ID(params: CLEFile) {
-        return await this.NativeMethod('GetDeviceID', params)
+    async Get_Device_ID() {
+        return await this.NativeMethod2('GetDeviceID')
     }
     async IS_EXIST_CLE_File(params: CLEFile) {
         return await this.NativeMethod('IsExistCLEFile', params)
@@ -50,6 +50,23 @@ class NativeAPI {
             }
         });
     }
+
+    async NativeMethod2(name: string): Promise<any> {
+        if (!this.APP_CMR) return this.init();
+
+        const method = this.APP_CMR[name];
+        return await new Promise((resolve, reject) => {
+            try {
+                method ? method((err: any, res: any) => {
+                    err ? reject(err) : resolve(res);
+                }) : reject(`${name} is not defined`);
+            } catch (error) {
+                reject(error);
+            }
+        });
+    }
+
+
 
 }
 
