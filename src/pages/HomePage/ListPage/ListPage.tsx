@@ -64,7 +64,7 @@ export class CMList extends React.Component<CMListProps, IListPageState> {
                 onEndReachedThreshold={0.5}
                 onEndReached={onPullUp}
                 {...this.props}
-                ListEmptyComponent={<Text>没有数据</Text>}
+                ListEmptyComponent={<Text style={{ textAlign: 'center', lineHeight: 100 }}>没有数据</Text>}
                 ListFooterComponent={<Text style={{ textAlign: 'center', color: '#ccc', paddingVertical: 10 }}>已加载完全部</Text>}
             />
         );

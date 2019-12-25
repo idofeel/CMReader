@@ -1,5 +1,7 @@
 
-const domain = 'http://fm.aijk.xyz/'
+// const domain = 'http://fm.aijk.xyz/'
+const domain = 'http://www.featuremaker.xyz/'
+
 let headers = {}
 class Request {
 
