@@ -143,7 +143,7 @@ export default class HomePage extends Component<Props, State> {
             const initialData = resMenus.data[actived];
             this.getData(initialData, initialPage);
         }
-        this.props.globalStroe.removeloading();
+        // this.props.globalStroe.removeloading();
     }
 
     async onSearch(searchText: string) {
@@ -250,6 +250,7 @@ export default class HomePage extends Component<Props, State> {
             refresh(categorys);
         } else {
             let newCate = toJS(cateData);
+            if (!searchText && !newCate.id) return
             const res = searchText
                 ? await this.getSearchData(searchText, 0)
                 : await this.getCateData(newCate.id, 0);
@@ -288,6 +289,7 @@ export default class HomePage extends Component<Props, State> {
             if (newCate.start < 0) {
                 return;
             }
+
             const res = searchText
                 ? await this.getSearchData(searchText, newCate.start)
                 : await this.getCateData(newCate.id, newCate.start);

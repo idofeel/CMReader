@@ -1,6 +1,8 @@
 
 // const domain = 'http://fm.aijk.xyz/'
-const domain = 'http://www.featuremaker.xyz/'
+// const domain = 'http://www.featuremaker.xyz/'
+const domain = 'http://cle.aijk.xyz'
+
 
 let headers = {}
 class Request {
@@ -102,7 +104,7 @@ class Request {
 
             throw new Error('网络错误，请稍后再试');
         }
-        console.log(`%c get: ${url}`, 'color:#0f0;', json);
+        console.log(`%c ${options.method}: ${url}`, 'color:#0f0;', options, json);
 
         return json;
     }
@@ -159,11 +161,9 @@ class Request {
             url,
             {
                 method: 'POST',
-                headers: Object.assign(headers, {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                }),
+                headers: Object.assign(headers),
                 timeout: 10000,
-                body: urlEncoded(data)
+                body: JSON.stringify(data)
             },
             'json',
             retry
