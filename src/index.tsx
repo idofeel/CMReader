@@ -16,6 +16,7 @@ import LoginPage from './pages/Login/Login';
 import MinePage from './pages/MinePage/MinePage';
 import PrivatePage from './pages/Private/Private';
 import ModifyPage from './pages/ModifyPage/ModifyPage';
+import RegisterPage from './pages/Register/RegisterPage';
 import { post } from './utils/request';
 import api from './services/api';
 
@@ -127,11 +128,14 @@ const Page = {
             header: () => null, // 首页不展示tab
         }),
     },
-    Login: {
+    LoginPage: {
         screen: LoginPage,
     },
     ModifyPage: {
         screen: ModifyPage
+    },
+    RegisterPage: {
+        screen: RegisterPage
     },
     Test1: {
         screen: HomeScreen,

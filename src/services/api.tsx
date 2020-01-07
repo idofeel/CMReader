@@ -20,7 +20,7 @@ export default {
 		// 注册
 		register: '/?r=user&d=register&o=submit', // {username,password,password2,email,register_mode,seccode,authority_code,orgid}
 		login: '/?r=user&d=login&m=name', // {username, password, period}
-		isUname: '/?r=user&d=register&o=isusername',
+		isUname: '/?r=user&d=register&o=isusername', // {username}
 		imgcode: '/?r=user&d=register&o=getseccode',
 		isseccode: '/?r=user&d=register&o=isseccode',
 		islogin: '/?r=user&d=islogin',

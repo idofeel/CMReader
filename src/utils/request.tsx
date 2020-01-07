@@ -299,7 +299,7 @@ const joinUrlEncoded = (url: string, data: object) => {
     }
     return url
 }
-export { post, get, joinUrl, joinUrlEncoded }
+export { post, get, joinUrl, joinUrlEncoded, domain }
 
 interface props {
     url?: string,

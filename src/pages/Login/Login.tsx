@@ -21,9 +21,6 @@ export interface ILoginState {
 @inject('globalStroe')
 @observer
 export default class Login extends React.Component<ILoginProps, ILoginState> {
-    static navigationOptions = {
-        header: null
-    };
     constructor(props: ILoginProps) {
         super(props);
 
@@ -75,9 +72,11 @@ export default class Login extends React.Component<ILoginProps, ILoginState> {
                     <Button type="primary" disabled={this.state.allowLogin} loading={this.state.loginLoading} style={{ marginTop: 30 }} onPress={this.onLogin}>登录</Button>
                 </View>
 
-                <Text style={{ textAlign: "center", flexDirection: 'row', alignContent: "center", marginBottom: 10, }}>
+                <Text style={{ textAlign: "center", flexDirection: 'row', alignContent: "center", marginBottom: 10, }} onPress={() => {
+                    this.goRegister()
+                }}>
                     注册新用户
-                    </Text>
+                </Text>
             </SafeAreaView >
         );
     }
@@ -102,6 +101,14 @@ export default class Login extends React.Component<ILoginProps, ILoginState> {
         })
 
         // await post(api.auth.islogin)
+    }
+
+    goRegister() {
+        this.props.navigation.navigate('RegisterPage')
+    }
+
+    componentWillUnmount() {
+        this.setState = () => { return };
     }
 }
 
