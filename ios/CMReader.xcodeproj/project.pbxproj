@@ -670,7 +670,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.CMReader1;
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.CMReader;
 				PRODUCT_NAME = CMReader;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -694,7 +694,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.CMReader1;
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.CMReader;
 				PRODUCT_NAME = CMReader;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				VERSIONING_SYSTEM = "apple-generic";

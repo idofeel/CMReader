@@ -30,11 +30,10 @@ export default class Mine extends React.Component<IMineProps, IMineState> {
     }
 
     public render() {
-        console.log(this.props);
         const { userInfo } = this.props.globalStroe;
         if (!userInfo.isLogin) return <Login {...this.props} />
         return (
-            <SafeAreaView style={{ padding: 20, flex: 1, justifyContent: 'space-between' }}>
+            <SafeAreaView style={{ flex: 1, justifyContent: 'space-between' }}>
                 <List style={{ paddingBottom: 50 }} >
                     <Item disabled extra={<Image source={{ uri: logo }} style={Styles.avatar} />} onPress={() => { }}>
                         头像

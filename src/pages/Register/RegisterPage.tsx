@@ -49,12 +49,12 @@ export default class RegisterPage extends React.Component<IRegisterPageProps, IR
     public render() {
         const { username, imgCode, errorMsg, password, password2, seccode, submiting } = this.state
         return (
-            <View style={{ backgroundColor: "#eee" }}>
+            <View style={{ backgroundColor: "#eee", paddingTop: 20 }}>
                 {/* <ScrollView > */}
                 {!!errorMsg && <NoticeBar mode="closable" icon={<Icon name="warning" color="red" />}>
                     {errorMsg}
                 </NoticeBar>}
-                <List style={{ marginTop: 20 }}>
+                <List>
                     <InputItem
                         labelNumber={3}
                         placeholder="请输入用户名"
