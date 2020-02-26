@@ -11,7 +11,7 @@ import { inject, observer } from 'mobx-react';
 
 
 export interface IRegisterPageProps {
-    globalStroe: any
+    globalStore: any
     navigation: any
 }
 
@@ -25,7 +25,7 @@ export interface IRegisterPageState {
     submiting: boolean
 }
 
-@inject('globalStroe')
+@inject('globalStore')
 @observer
 export default class RegisterPage extends React.Component<IRegisterPageProps, IRegisterPageState> {
     static navigationOptions = {
@@ -161,7 +161,7 @@ export default class RegisterPage extends React.Component<IRegisterPageProps, IR
         const res = await post(api.auth.register, { username, password2, password, seccode })
         if (res.success) {
             // 刷新信息
-            this.props.globalStroe.saveUserInfo({ ...res.data, isLogin: true })
+            this.props.globalStore.saveUserInfo({ ...res.data, isLogin: true })
             // 返回首页
             this.props.navigation.navigate('HomePage')
         } else {

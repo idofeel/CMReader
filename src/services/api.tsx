@@ -27,5 +27,15 @@ export default {
 		qqLogin: '/?r=qcloginstep1',
 		qqLogin2: '/?r=user&d=login&m=qq',
 		logout: '/?r=user&d=logout',
+	},
+	user: {
+		base: '/?r=center&d=profile&o=getbase',	// 基础信息
+		export: '/?r=center&d=extprofile&o=getext', // 扩展信息
+	},
+	modify: {
+		UpAvatar: '/?r=center&d=upavatar', // {file}
+		nikeName: '/?r=center&d=profile&o=setnick', // {nick}
+		realName: '/?r=center&d=profile&o=setrealname', // {realname}
+		extprofile: '/?r=center&d=extprofile&o=setone', // {cid,v}
 	}
 };

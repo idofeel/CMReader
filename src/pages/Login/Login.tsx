@@ -18,7 +18,7 @@ export interface ILoginState {
     allowLogin: boolean
 }
 
-@inject('globalStroe')
+@inject('globalStore')
 @observer
 export default class Login extends React.Component<ILoginProps, ILoginState> {
     constructor(props: ILoginProps) {
@@ -91,7 +91,20 @@ export default class Login extends React.Component<ILoginProps, ILoginState> {
 
         const res = await post(api.auth.login, { username, password })
         if (res.success) {
-            this.props.globalStroe.saveUserInfo({ ...res.data, isLogin: true })
+            let userInfoList: any[] = [];
+            let userExtInfo: any[] = [];
+
+            try {
+                const userinfoReq = [post(api.user.base), post(api.user.export)]
+                const [getBaseInfo, getExportInfo] = await Promise.all(userinfoReq)
+
+                if (getBaseInfo.success) userInfoList = getBaseInfo.data
+                if (getExportInfo.success) userExtInfo = getExportInfo.data
+
+            } catch (error) {
+
+            }
+            this.props.globalStore.save({ ...res.data, isLogin: true }, userInfoList, userExtInfo)
         } else {
             Toast.fail(res.faildesc || '登录失败')
         }

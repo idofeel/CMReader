@@ -132,6 +132,8 @@ class Request {
         } else {
             url += '&' + data;
         }
+        console.log('get:' + url);
+
         return this._request(
             url,
             {

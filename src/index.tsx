@@ -11,7 +11,7 @@ import './@types';
 import Test from './tset';
 import Header from './components/Header';
 import HomePage from './pages/HomePage';
-import stroe from './globalStroe';
+import store from './globalStore';
 import LoginPage from './pages/Login/Login';
 import MinePage from './pages/MinePage/MinePage';
 import PrivatePage from './pages/Private/Private';
@@ -83,7 +83,7 @@ const BottomTabNavigatorConfig = {
     },
 };
 
-@inject('globalStroe')
+@inject('globalStore')
 @observer
 class Tabbar extends Component<any, any> {
 
@@ -92,7 +92,7 @@ class Tabbar extends Component<any, any> {
         // 根据是否需要显示商品推荐菜单来决定state中的routes
         let finalRoutes = routes;
 
-        if (!this.props.globalStroe.userInfo.isLogin) {
+        if (!this.props.globalStore.userInfo.isLogin) {
             finalRoutes = routes.filter((route: any) => route.key !== 'Private');
         }
         const currentRoute = routes[index];
@@ -110,9 +110,24 @@ class Tabbar extends Component<any, any> {
     }
 
     async componentDidMount() {
+        // 是否登录
         const res = await post(api.auth.islogin);
         if (res.success) {
-            this.props.globalStroe.saveUserInfo({ ...res.data, isLogin: true })
+            // 已登录     
+            let userInfoList: any[] = [];
+            let userExtInfo: any[] = [];
+
+            try {
+                const userinfoReq = [post(api.user.base), post(api.user.export)]
+                const [getBaseInfo, getExportInfo] = await Promise.all(userinfoReq)
+
+                if (getBaseInfo.success) userInfoList = getBaseInfo.data
+                if (getExportInfo.success) userExtInfo = getExportInfo.data
+
+            } catch (error) {
+
+            }
+            this.props.globalStore.save({ ...res.data, isLogin: true }, userInfoList, userExtInfo)
         }
     }
 
@@ -166,7 +181,7 @@ class App extends React.Component<Props, State> {
     render() {
         return (
             <Provider>
-                <MobxProvider globalStroe={stroe}>
+                <MobxProvider globalStore={store}>
                     <AppContainer
                         ref={nav => {
                             this.navigator = nav;
@@ -178,7 +193,7 @@ class App extends React.Component<Props, State> {
         );
     }
     componentDidMount() {
-        // stroe.loading(0);
+        // store.loading(0);
     }
     routerChange() {
         // console.log(...arguments)

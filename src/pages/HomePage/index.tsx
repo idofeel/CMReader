@@ -43,13 +43,13 @@ interface categorys {
     category: cateData[];
 }
 
-@inject('globalStroe')
+@inject('globalStore')
 @observer
 export default class IndexPage extends Component<Props, State> {
     store = new Store
     render() {
         return (
-            <Provider homeStroe={this.store}>
+            <Provider homeStore={this.store}>
                 <StatusBar barStyle="dark-content" backgroundColor="#fff" />
                 <SafeAreaView
                     style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>

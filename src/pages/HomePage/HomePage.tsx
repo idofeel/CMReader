@@ -16,8 +16,8 @@ const CMR = NativeModules.CMRRNModule;
 
 interface Props {
     // navigation?: any;
-    homeStroe?: any;
-    globalStroe?: any;
+    homeStore?: any;
+    globalStore?: any;
 }
 interface State {
     menus: MenusData[];
@@ -27,13 +27,13 @@ interface State {
     refreshing: boolean;
 }
 
-@inject('globalStroe')
-@inject('homeStroe')
+@inject('globalStore')
+@inject('homeStore')
 @observer
 export default class HomePage extends Component<Props, State> {
     constructor(props: Props) {
         super(props);
-        const { categorys = [], initialPage = 0 } = props.homeStroe;
+        const { categorys = [], initialPage = 0 } = props.homeStore;
         this.state = {
             categorys,
             initialPage,
@@ -52,7 +52,7 @@ export default class HomePage extends Component<Props, State> {
             actived,
             menus,
             cateData,
-        } = this.props.homeStroe;
+        } = this.props.homeStore;
         const { refreshing } = this.state;
 
         return (
@@ -113,7 +113,7 @@ export default class HomePage extends Component<Props, State> {
     }
 
     changeMenus = (item: MenusData, index: number) => {
-        let { saveMenus, menus } = this.props.homeStroe;
+        let { saveMenus, menus } = this.props.homeStore;
         saveMenus(menus, index);
         this.getData(item, 0);
     };
@@ -136,18 +136,18 @@ export default class HomePage extends Component<Props, State> {
             saveMenus,
             refresh,
             saveCategory,
-        } = this.props.homeStroe;
+        } = this.props.homeStore;
 
         if (resMenus.success) {
             saveMenus(resMenus.data, actived);
             const initialData = resMenus.data[actived];
             this.getData(initialData, initialPage);
         }
-        // this.props.globalStroe.removeloading();
+        // this.props.globalStore.removeloading();
     }
 
     async onSearch(searchText: string) {
-        let { saveCategory, cateData } = this.props.homeStroe;
+        let { saveCategory, cateData } = this.props.homeStore;
         let searching = Toast.loading('搜索中');
         Keyboard.dismiss();
         const searchRes = await this.getSearchData(searchText, 0);
@@ -188,7 +188,7 @@ export default class HomePage extends Component<Props, State> {
         };
     }
     async getData(item: MenusData, tabIndex: number) {
-        let { refresh, saveCategory } = this.props.homeStroe;
+        let { refresh, saveCategory } = this.props.homeStore;
 
         let { id } = item;
 
@@ -240,7 +240,7 @@ export default class HomePage extends Component<Props, State> {
             refresh,
             saveCategory,
             searchText,
-        } = this.props.homeStroe;
+        } = this.props.homeStore;
         if (categorys.length) {
             categorys = toJS(categorys);
             let CurrentCate = categorys[initialPage];
@@ -271,7 +271,7 @@ export default class HomePage extends Component<Props, State> {
             refresh,
             saveCategory,
             searchText,
-        } = this.props.homeStroe;
+        } = this.props.homeStore;
         if (categorys.length) {
             categorys = toJS(categorys);
             let CurrentCate = categorys[initialPage];
@@ -311,7 +311,7 @@ export default class HomePage extends Component<Props, State> {
         // 是否加载分类
         if (!item.loadCategory) {
             const cateData = await this.getCateData(item.id, 0);
-            const { categorys, refresh } = this.props.homeStroe;
+            const { categorys, refresh } = this.props.homeStore;
             let newcategorys = toJS(categorys);
             newcategorys[index].category = cateData.category;
             newcategorys[index].start = cateData.start;

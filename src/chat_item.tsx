@@ -22,13 +22,13 @@ interface Item {
 interface State { }
 interface Props {
 	navigation?: any;
-	homeStroe?: any;
+	homeStore?: any;
 	item: Item;
 	index: number;
 	onPress?: (a: Item) => any;
 }
 
-@inject('homeStroe')
+@inject('homeStore')
 class ChatItem extends Component<Props, State> {
 	render() {
 		const { item, onPress, index } = this.props;
@@ -160,7 +160,7 @@ class ChatItem extends Component<Props, State> {
 
 	async refreshData(item: cateData, index: number, isExist: boolean = false) {
 		item = JSON.parse(JSON.stringify(item))
-		const { initialPage, categorys, refresh, cateData, saveCategory, searchText } = this.props.homeStroe;
+		const { initialPage, categorys, refresh, cateData, saveCategory, searchText } = this.props.homeStore;
 		let newCategorys = toJS(categorys)
 		let loading = Toast.loading('处理中')
 		item.exist = isExist
