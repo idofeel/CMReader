@@ -161,7 +161,21 @@ export default class RegisterPage extends React.Component<IRegisterPageProps, IR
         const res = await post(api.auth.register, { username, password2, password, seccode })
         if (res.success) {
             // 刷新信息
-            this.props.globalStore.saveUserInfo({ ...res.data, isLogin: true })
+            let userInfoList: any[] = [];
+            let userExtInfo: any[] = [];
+
+            try {
+                const userinfoReq = [post(api.user.base), post(api.user.export)]
+                const [getBaseInfo, getExportInfo] = await Promise.all(userinfoReq)
+
+                if (getBaseInfo.success) userInfoList = getBaseInfo.data
+                if (getExportInfo.success) userExtInfo = getExportInfo.data
+
+            } catch (error) {
+
+            }
+            this.props.globalStore.save({ ...res.data, isLogin: true }, userInfoList, userExtInfo)
+            // this.props.globalStore.saveUserInfo({ ...res.data, isLogin: true })
             // 返回首页
             this.props.navigation.navigate('HomePage')
         } else {
