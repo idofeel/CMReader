@@ -27,7 +27,7 @@ interface Item {
     lesurl: string | null;
 }
 
-export default class PrivatePage extends React.Component<IPrivatePageProps, IPrivatePageState> {
+export default class PrivatePage extends React.Component<any, IPrivatePageState> {
     constructor(props: IPrivatePageProps) {
         super(props);
 
@@ -78,7 +78,7 @@ export default class PrivatePage extends React.Component<IPrivatePageProps, IPri
     download = async (item: Item, index: number) => {
         const params = await this.getCompleteData(item);
         // 是否存在
-        item.exist ? NativeAPI.OPEN_CLE_FILE(item) : this.downloadCle(params, index);
+        item.exist ? NativeAPI.OPEN_CLE_FILE(params) : this.downloadCle(params, index);
     }
     // 重新下载
     reDownload = (item: Item, index: number) => {
@@ -98,15 +98,27 @@ export default class PrivatePage extends React.Component<IPrivatePageProps, IPri
     }
     // 删除
     delete = async (item: Item, index: number) => {
-        try {
-            const res = await NativeAPI.DELETE_CLE_FILE(item);
-            let { data } = this.state;
-            data[index].exist = false;
-            this.setState({ data })
-        } catch (error) {
-            Toast.fail('删除文件失败！');
-            // this.download(item, index);
-        }
+        const btns = [
+            {
+                text: '确认',
+                onPress: async () => {
+                    try {
+                        const res = await NativeAPI.DELETE_CLE_FILE(item);
+                        let { data } = this.state;
+                        data[index].exist = false;
+                        this.setState({ data })
+                    } catch (error) {
+                        Toast.fail('删除文件失败！');
+                        // this.download(item, index);
+                    }
+                },
+                style: { color: 'red' }
+            },
+            { text: '取消' }
+
+        ]
+        Modal.alert('确认删除文件！', null, btns);
+
     }
 
     async downloadCle(item: Item, index: number) {
@@ -155,10 +167,16 @@ export default class PrivatePage extends React.Component<IPrivatePageProps, IPri
         this.loading = true; // 阻止多次进行加载
         const res = await get(api.source.private, { start: next });
         let { data } = this.state;
-        const newData = this.formatCMData(res.data);
-        data = next === 0 ? newData : data.concat(newData)
+        if (res.success) {
+            const newData = this.formatCMData(res.data);
+            data = next === 0 ? newData : data.concat(newData)
+            this.next = res.next;
+        } else {
+            data = [];
+            this.next = -1;
+        }
+
         this.setState({ data })
-        this.next = res.next;
         this.loading = false;
 
     }
@@ -178,8 +196,38 @@ export default class PrivatePage extends React.Component<IPrivatePageProps, IPri
             };
         })
     }
+    _navListener: any;
+    userId: any;
     componentDidMount() {
-        console.log('加载私有资源');
+        this.userId = ''
+        this.props.globalStore.userInfoList.some((item: any) => {
+            if (item[0] === 'uid') {
+                this.userId = item[2];
+                return true;
+            }
+        })
+        this._navListener = this.props.navigation.addListener('didFocus', () => {
+            let newId = ''
+            this.props.globalStore.userInfoList.some((item: any) => {
+                if (item[0] === 'uid') {
+                    newId = item[2];
+                    return true;
+                }
+            })
+            if (newId !== this.userId) {
+                this.userId = newId;
+                this.setState({
+                    loading: true,
+                    data: [],
+                })
+                this.next = 0
+                this.getData();
+            }
+        });
+        this.next = 0
         this.getData()
+    }
+    componentWillUnmount() {
+        this._navListener.remove();
     }
 }

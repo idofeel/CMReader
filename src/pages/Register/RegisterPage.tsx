@@ -86,9 +86,7 @@ export default class RegisterPage extends React.Component<IRegisterPageProps, IR
                                 <Image source={{
                                     uri: imgCode
                                 }} resizeMode="contain" style={{ width: 120, height: 44 }} />
-                                <TouchableOpacity onPress={() => this.getImgCode()}>
-                                    <Icon name="sync" style={{ paddingHorizontal: 5, color: '#108ee9' }} />
-                                </TouchableOpacity>
+                                <Icon name="sync" onPress={() => this.getImgCode()} style={{ paddingHorizontal: 5, color: '#108ee9' }} />
                             </View>
                         } labelNumber={3} placeholder="请输入右侧验证码" >验证码</InputItem>
                 </List>

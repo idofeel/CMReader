@@ -4,7 +4,7 @@ import { createAppContainer, DrawerActions } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator, BottomTabBar } from 'react-navigation-tabs';
 import { observer, Provider as MobxProvider, inject } from 'mobx-react';
-import { Drawer, Button, WhiteSpace, Provider, Toast, Portal } from '@ant-design/react-native';
+import { Drawer, Button, WhiteSpace, Provider, Toast, Portal, Icon } from '@ant-design/react-native';
 // page
 import './@types';
 
@@ -74,6 +74,12 @@ const HomeTab = {
     },
 };
 
+const HomePageIcon = {
+    Home: 'home',
+    Private: 'database',
+    Mine: 'user'
+}
+
 const BottomTabNavigatorConfig = {
     initialRouteName: 'Home',
     labelPosition: 'below-icon',
@@ -106,7 +112,10 @@ class Tabbar extends Component<any, any> {
         };
     };
     render() {
-        return <BottomTabBar {...this.props} navigation={this.dealNavigation()} />;
+        return <BottomTabBar {...this.props} navigation={this.dealNavigation()} renderIcon={this.renderIcon} />;
+    }
+    renderIcon = ({ route, focused, tintColor }: any) => {
+        return <Icon name={(HomePageIcon as any)[route.key]} color={tintColor} />
     }
 
     async componentDidMount() {
