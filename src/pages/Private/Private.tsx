@@ -1,5 +1,8 @@
 import * as React from 'react';
 import { View, FlatList, Text } from 'react-native';
+import { Toast, Modal } from '@ant-design/react-native';
+import { toJS } from 'mobx';
+import { inject, observer } from 'mobx-react';
 import { CMList } from '../HomePage/ListPage/ListPage'
 import { SafeAreaView } from 'react-navigation';
 import { get, joinUrlEncoded, joinUrl } from '../../utils/request';
@@ -7,8 +10,7 @@ import api from '../../services/api';
 import CMItem from '../../components/CMItem.tsx/CMItem'
 import Config from '../../utils/Config';
 import NativeAPI from '../../API/NativeAPI';
-import { Toast, Modal } from '@ant-design/react-native';
-import { toJS } from 'mobx';
+
 
 export interface IPrivatePageProps {
 }
@@ -26,7 +28,7 @@ interface Item {
     serverid: string;
     lesurl: string | null;
 }
-
+@inject('globalStore')
 export default class PrivatePage extends React.Component<any, IPrivatePageState> {
     constructor(props: IPrivatePageProps) {
         super(props);

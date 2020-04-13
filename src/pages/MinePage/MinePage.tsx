@@ -34,7 +34,6 @@ export default class Mine extends React.Component<IMineProps, IMineState> {
 
     public render() {
         const { userInfo, userInfoList, userExtInfo } = this.props.globalStore;
-        console.log(userInfoList);
         if (!userInfo.isLogin) return <Login {...this.props} />
         return (
             <SafeAreaView style={{ flex: 1, justifyContent: 'space-between' }}>

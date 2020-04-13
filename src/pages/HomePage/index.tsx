@@ -46,10 +46,9 @@ interface categorys {
 @inject('globalStore')
 @observer
 export default class IndexPage extends Component<Props, State> {
-    store = new Store
     render() {
         return (
-            <Provider homeStore={this.store}>
+            <Provider homeStore={Store}>
                 <StatusBar barStyle="dark-content" backgroundColor="#fff" />
                 <SafeAreaView
                     style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>

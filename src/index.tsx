@@ -115,7 +115,7 @@ class Tabbar extends Component<any, any> {
         return <BottomTabBar {...this.props} navigation={this.dealNavigation()} renderIcon={this.renderIcon} />;
     }
     renderIcon = ({ route, focused, tintColor }: any) => {
-        return <Icon name={(HomePageIcon as any)[route.key]} color={tintColor} />
+        return <Icon name={(HomePageIcon as any)[route.key]} color={tintColor} key={route.key} />
     }
 
     async componentDidMount() {
