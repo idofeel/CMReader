@@ -156,8 +156,9 @@ export default class PrivatePage extends React.Component<any, IPrivatePageState>
             data.cleurl = cle
             const lesUrl = joinUrlEncoded(api.fileInfo.les, { pid: data.contentid, devid: deviceID })
             data.lesurl = joinUrl(lesUrl)
+            data.serverid = serverInfo.serverid;
         }
-        console.log('%c 获取数据：', 'color:red;', data);
+        console.log('%c 获取数据：', 'color:red;', data, serverInfo);
 
         return data
     }

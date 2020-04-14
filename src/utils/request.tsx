@@ -1,6 +1,6 @@
 
 // const domain = 'http://fm.aijk.xyz/'
-const domain = 'http://www.featuremaker.xyz/'
+const domain = 'http://www.featuremaker.xyz'
 // const domain = 'http://cle.aijk.xyz'
 
 
