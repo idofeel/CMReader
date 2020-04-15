@@ -2,7 +2,7 @@
 
 import { observable, action, toJS } from 'mobx';
 import { Toast, Portal } from '@ant-design/react-native';
-
+import Config from './utils/Config';
 
 interface UserInfoProps {
     isLogin: false,
@@ -72,6 +72,7 @@ class store {
         this.userInfo = userInfo
         this.userInfoList = userInfoList
         this.userExtInfo = userExtInfo
+        if (userInfo.isLogin) Config.getCookie();
     }
 
     @action logout = () => {

@@ -151,10 +151,10 @@ export default class PrivatePage extends React.Component<any, IPrivatePageState>
         ]
         const [cleData, config] = await Promise.all(reqList)
         const { cle, md5, filesize } = cleData.data || {}
-        const { deviceID, serverInfo = {} } = config
+        const { deviceID, serverInfo = {}, cookies } = config
         if (cleData.success && deviceID && serverInfo.serverid) {
             data.cleurl = cle
-            const lesUrl = joinUrlEncoded(api.fileInfo.les, { pid: data.contentid, devid: deviceID })
+            const lesUrl = joinUrlEncoded(api.fileInfo.les, { pid: data.contentid, devid: deviceID, ...cookies })
             data.lesurl = joinUrl(lesUrl)
             data.serverid = serverInfo.serverid;
         }
