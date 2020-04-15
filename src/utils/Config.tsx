@@ -45,7 +45,11 @@ class Config {
     async getCookie() {
         const res = await get(api.auth.cookie);
         if (res.success) {
-            this.cookies[res.name] = res.data;
+            // this.cookies[res.name] = res.data;
+            this.cookies = {
+                key: res.name,
+                val: res.data
+            };
             this.hasCookie = true
         }
     }

@@ -154,7 +154,7 @@ export default class PrivatePage extends React.Component<any, IPrivatePageState>
         const { deviceID, serverInfo = {}, cookies } = config
         if (cleData.success && deviceID && serverInfo.serverid) {
             data.cleurl = cle
-            const lesUrl = joinUrlEncoded(api.fileInfo.les, { pid: data.contentid, devid: deviceID, ...cookies })
+            const lesUrl = joinUrlEncoded(api.fileInfo.les, { pid: data.contentid, devid: deviceID }) + `&${cookies.key}=${cookies.val}`
             data.lesurl = joinUrl(lesUrl)
             data.serverid = serverInfo.serverid;
         }
