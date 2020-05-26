@@ -52,7 +52,7 @@ export default class IndexPage extends Component<Props, State> {
                 <StatusBar barStyle="dark-content" backgroundColor="#fff" />
                 <SafeAreaView
                     style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                    <HomePage />
+                    <HomePage {...this.props}/>
                 </SafeAreaView>
             </Provider >
         );

@@ -11,7 +11,8 @@ import Menus from './Menus/Menus';
 import ListPage, { CMList } from './ListPage/ListPage';
 import api from '../../services/api';
 import Config from '../../utils/Config';
-
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import NativeAPI from '../../API/NativeAPI';
 const CMR = NativeModules.CMRRNModule;
 
 interface Props {
@@ -84,12 +85,15 @@ export default class HomePage extends Component<Props, State> {
                         }}
                         style={{ paddingLeft: 10 }}
                     />
-                    <View style={{ flex: 1 }}>
+                    <View style={{ flex: 1, flexDirection: "row", paddingRight: 10, justifyContent: 'center', alignItems: 'center' }}>
                         <SearchBar
                             onSearch={(val: any) => {
                                 this.onSearch(val);
                             }}
                         />
+                        <TouchableOpacity onPress={() => this.onScan()}>
+                            <Icon name="scan" color="#ccc" />
+                        </TouchableOpacity>
                     </View>
                 </View>
                 {categorys.length ? (
@@ -124,7 +128,7 @@ export default class HomePage extends Component<Props, State> {
         return (
             <Text style={{ textAlign: 'center', color: '#ccc', paddingVertical: 10 }}>
                 已加载完全部
-      </Text>
+            </Text>
         );
     }
 
@@ -301,6 +305,26 @@ export default class HomePage extends Component<Props, State> {
         }
     };
 
+    private async onScan() {
+        let {
+            initialPage,
+            categorys,
+            cateData,
+            refresh,
+            saveCategory,
+            searchText,
+        } = this.props.homeStore;
+        try {
+            const res = await NativeAPI.NativeMethod('OpenQRCode', null);
+            if (res === 1) {
+                let newCate = toJS(cateData);
+                newCate.category = await this.getCLEFileIsExist(cateData.category);
+                saveCategory(newCate, searchText);
+            }
+        } catch (error) {
+
+        }
+    }
     // 首页切换分类查找文件是否存在
     async onChange(item: NewCategorys, index: number) {
         console.log('onChange', toJS(item));

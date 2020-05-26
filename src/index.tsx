@@ -17,9 +17,9 @@ import MinePage from './pages/MinePage/MinePage';
 import PrivatePage from './pages/Private/Private';
 import ModifyPage from './pages/ModifyPage/ModifyPage';
 import RegisterPage from './pages/Register/RegisterPage';
+import SearchPage from './pages/HomePage/SearchPage/SearchPage';
 import { post } from './utils/request';
 import api from './services/api';
-
 interface State { }
 interface Props {
     navigation: any;
@@ -164,6 +164,9 @@ const Page = {
     Test1: {
         screen: HomeScreen,
     },
+    SearchPage:{
+        screen: SearchPage
+    }
 };
 
 const PageConfig = {
