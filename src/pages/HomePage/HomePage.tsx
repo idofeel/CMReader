@@ -55,7 +55,7 @@ export default class HomePage extends Component<Props, State> {
             cateData,
         } = this.props.homeStore;
         const { refreshing } = this.state;
-
+        const iconColor = "#3d5fb4"
         return (
             <Drawer
                 drawerRef={(el: any) => (this.drawer = el)}
@@ -79,7 +79,7 @@ export default class HomePage extends Component<Props, State> {
                     }}>
                     <Icon
                         name="menu"
-                        color="#3d5fb4"
+                        color={iconColor}
                         onPress={() => {
                             this.drawer && this.drawer.openDrawer();
                         }}
@@ -92,7 +92,7 @@ export default class HomePage extends Component<Props, State> {
                             }}
                         />
                         <TouchableOpacity onPress={() => this.onScan()}>
-                            <Icon name="scan" color="#ccc" />
+                            <Icon name="scan" color={iconColor} />
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -315,7 +315,9 @@ export default class HomePage extends Component<Props, State> {
             searchText,
         } = this.props.homeStore;
         try {
-            const res = await NativeAPI.NativeMethod('OpenQRCode', null);
+            const res = await NativeAPI.NativeMethod2('OpenQRCode');
+            console.log(res);
+
             if (res === 1) {
                 let newCate = toJS(cateData);
                 newCate.category = await this.getCLEFileIsExist(cateData.category);
