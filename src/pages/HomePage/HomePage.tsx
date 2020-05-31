@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, NativeModules, Text, StyleSheet, Keyboard } from 'react-native';
+import { View, NativeModules, Text, StyleSheet, Keyboard, TouchableOpacity } from 'react-native';
 import { Icon, Drawer, Button, Toast, Portal } from '@ant-design/react-native';
 import { inject, observer } from 'mobx-react';
 import { toJS } from 'mobx';
@@ -11,7 +11,6 @@ import Menus from './Menus/Menus';
 import ListPage, { CMList } from './ListPage/ListPage';
 import api from '../../services/api';
 import Config from '../../utils/Config';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import NativeAPI from '../../API/NativeAPI';
 const CMR = NativeModules.CMRRNModule;
 
