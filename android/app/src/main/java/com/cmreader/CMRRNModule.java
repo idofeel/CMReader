@@ -1,6 +1,8 @@
 package com.cmreader;
 
 import android.content.Intent;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -77,22 +79,34 @@ public class CMRRNModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void GetDeviceID(Callback callback){
+        Toast.makeText(getCurrentActivity(),"GetDeviceID", Toast.LENGTH_SHORT);
+        Log.e("CMReader", "GetDeviceID");
+
         callback.invoke(null, "12312321312");
     }
 
     @ReactMethod
     public void DownloadAndOpenCLEFile(ReadableMap json, Callback callback){
+        Toast.makeText(getCurrentActivity(),"DownloadAndOpenCLEFile", Toast.LENGTH_SHORT);
+        Log.e("CMReader", "DownloadAndOpenCLEFile");
+
         callback.invoke(null, Integer.valueOf(1));
     }
 
     @ReactMethod
     public void OpenCLEFile(ReadableMap json, Callback callback){
+        Toast.makeText(getCurrentActivity(),"OpenCLEFile", Toast.LENGTH_SHORT);
+        Log.e("CMReader", "OpenCLEFile");
+
         callback.invoke(null, Integer.valueOf(0));
     }
 
     @ReactMethod
     public void OpenQRCode(Callback callback) {
+        Toast.makeText(getCurrentActivity(),"OpenQRCode", Toast.LENGTH_SHORT);
+        Log.e("CMReader", "OpenQRCode");
         callback.invoke(null, Integer.valueOf(1));
+
     }
 
 }
