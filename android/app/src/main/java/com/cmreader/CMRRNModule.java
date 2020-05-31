@@ -1,5 +1,7 @@
 package com.cmreader;
 
+import android.content.Intent;
+
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
@@ -86,6 +88,11 @@ public class CMRRNModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void OpenCLEFile(ReadableMap json, Callback callback){
         callback.invoke(null, Integer.valueOf(0));
+    }
+
+    @ReactMethod
+    public void OpenQRCode(Callback callback) {
+        callback.invoke(null, Integer.valueOf(1));
     }
 
 }
